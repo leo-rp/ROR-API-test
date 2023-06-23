@@ -1,8 +1,10 @@
+#FactoryBot.use_parent_strategy = true #fixs the nil user
+
 FactoryBot.define do
   factory :post do
-    title { "MyString" }
-    content { "MyString" }
-    published { false }
-    user { nil }
+    title { Faker::Lorem.sentence }
+    content { Faker::Lorem.paragraph }
+    published { [true, false].sample}
+    user
   end
 end
