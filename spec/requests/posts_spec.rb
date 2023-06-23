@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe "Posts", type: :request do
     
-    describe "GET /post" do
-        before { get '/post' }
+    describe "GET /posts" do
+        before { get '/posts' }
 
         it "should return OK" do 
             payload = JSON.parse(response.body)
@@ -12,9 +12,10 @@ RSpec.describe "Posts", type: :request do
         end
     end
 
-    decribe "with data in the DB" do
-        before { get '/post' }
-        let(:posts) { create_list(:post, 10 published: true)} #factory bot data            
+    describe "with data in the DB" do        
+        let!(:posts) { create_list(:post, 10, published: true)} #factory bot data
+        before { get '/posts' }
+
         it "should return all the posts published posts" do             
             payload = JSON.parse(response.body)
             expect(payload.size).to eq(posts.size)
@@ -22,14 +23,14 @@ RSpec.describe "Posts", type: :request do
         end
     end
     
-    describe "GET /post/{id}" do
-        let(:post) { create(:post)} #factory bot data
+    describe "GET /posts/{id}" do
+        let!(:post) { create(:post)} #factory bot data
         it "should return a post" do
-            get "/post/#{post.id}" 
-            payload = JSON.parse(response.body)
-            expect(payload.size).to_not be_empty
+            get "/posts/#{post.id}" 
+            payload = JSON.parse(response.body)            
+            puts(payload.inspect)
+            #expect(payload).to_not be_empty
             expect(payload["id"]).to eq(post.id)
-
             expect(response).to have_http_status(200)
         end
     end
