@@ -4,11 +4,25 @@ RSpec.describe "Posts", type: :request do
     
     #index - list
     describe "GET /posts" do
-        before { get '/posts' }
-
         it "should return OK" do
+            get '/posts'
             payload = JSON.parse(response.body)
             expect(payload).to be_empty
+            expect(response).to have_http_status(200)
+        end
+    end
+
+    describe "Search " do
+        let!(:hello_world) { create(:published_post, title: "hello world")} #factory bot data
+        let!(:hello_rails) { create(:published_post, title: "hello rails")} #factory bot data
+        let!(:rails_course) { create(:published_post, title: "rails course")} #factory bot data
+        it "should filter posts by title" do
+            get "/posts?search=hello"
+            payload = JSON.parse(response.body)
+            expect(payload).to_not be_empty
+            expect(payload.size).to eq(2)
+            expect(payload.map {  |p| p['id']}.sort).to eq([hello_world.id, hello_rails.id])
+            expect(payload).to_not be_empty
             expect(response).to have_http_status(200)
         end
     end
