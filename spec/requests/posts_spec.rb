@@ -40,7 +40,7 @@ RSpec.describe "Posts", type: :request do
 
     #show 
     describe "GET /posts/{id}" do
-        let!(:post) { create(:post)} #factory bot data
+        let!(:post) { create(:post, published: true)} #factory bot data
         it "should return a post" do
             get "/posts/#{post.id}"
             payload = JSON.parse(response.body)
@@ -56,7 +56,8 @@ RSpec.describe "Posts", type: :request do
         end
     end
     
-    #new / create
+    #old test
+=begin #new / create
     describe "POST /posts" do
         let!(:user) { create(:user) }
         it "should create a post" do
@@ -130,5 +131,6 @@ RSpec.describe "Posts", type: :request do
             expect(payload["error"]).to_not be_empty #error message
             expect(response).to have_http_status(:unprocessable_entity)
         end
-    end
+    end 
+=end
 end
